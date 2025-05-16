@@ -21,7 +21,7 @@ class FiltersViewModel(
     val genresUiState: StateFlow<UiState<List<Genre>>> = _genresUiState.asStateFlow()
 
 
-    private val _selectedGenre = MutableStateFlow<Genre?>(null) //null for all movies??TODO check logic
+    private val _selectedGenre = MutableStateFlow<Genre?>(null)
     val selectedGenre: StateFlow<Genre?> = _selectedGenre.asStateFlow()
 
     init {
