@@ -1,4 +1,4 @@
-package com.test.bragiapp.repository
+package com.test.bragiapp.domain.repository
 
 import com.test.bragiapp.domain.model.Genre
 import com.test.bragiapp.domain.model.Movie
