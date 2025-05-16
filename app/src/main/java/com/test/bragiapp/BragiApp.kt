@@ -2,7 +2,9 @@ package com.test.bragiapp
 
 import android.app.Application
 import com.test.bragiapp.di.appModule
+import com.test.bragiapp.di.repositoryModule
 import com.test.bragiapp.di.useCaseModule
+import com.test.bragiapp.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -22,7 +24,9 @@ class BragiApp: Application() {
             androidContext(this@BragiApp)
             modules(
                 appModule,
-                useCaseModule
+                repositoryModule,
+                useCaseModule,
+                viewModelModule
             )
         }
     }

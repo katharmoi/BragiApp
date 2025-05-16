@@ -1,6 +1,7 @@
 package com.test.bragiapp.di
 
 import com.test.bragiapp.BuildConfig
+import com.test.bragiapp.data.remote.ApiService
 import com.test.bragiapp.util.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -32,6 +33,10 @@ val appModule = module {
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    single<ApiService> {
+        get<Retrofit>().create(ApiService::class.java)
     }
 
 
