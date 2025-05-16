@@ -61,7 +61,7 @@ fun MoviesScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                //TODO Add Filters Screen Navigation
+                navController.navigate(Screen.FiltersScreen.route)
 
             }) {
                 Icon(Icons.Filled.Edit, "Filter movies")
