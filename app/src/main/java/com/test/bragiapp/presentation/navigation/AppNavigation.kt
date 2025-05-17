@@ -2,9 +2,9 @@ package com.test.bragiapp.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,7 +41,7 @@ fun AppNavigation() {
 
             val initialGenreIdArg = backStackEntry.arguments?.getInt(ARG_GENRE_ID)
 
-            val selectedGenreIdFromFilter by moviesViewModel.selectedGenreIdFromFilter.collectAsState()
+            val selectedGenreIdFromFilter by moviesViewModel.selectedGenreIdFromFilter.collectAsStateWithLifecycle()
 
             LaunchedEffect(initialGenreIdArg, selectedGenreIdFromFilter) {
                 val genreToLoad = if (selectedGenreIdFromFilter != -1) {
@@ -69,7 +69,7 @@ fun AppNavigation() {
             val moviesViewModel: MoviesViewModel =
                 koinViewModel(viewModelStoreOwner = mainGraphBackStackEntry)
 
-            val currentlyAppliedGenreId by moviesViewModel.selectedGenreIdFromFilter.collectAsState()
+            val currentlyAppliedGenreId by moviesViewModel.selectedGenreIdFromFilter.collectAsStateWithLifecycle()
 
 
             FiltersScreen(

@@ -25,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -53,7 +53,7 @@ fun MoviesScreen(
     navController: NavController,
     viewModel: MoviesViewModel
 ) {
-    val moviesState by viewModel.moviesUiState.collectAsState()
+    val moviesState by viewModel.moviesUiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -68,21 +68,27 @@ fun MoviesScreen(
             }
         }
     ) { paddingValues ->
-        Box(modifier = Modifier
-            .padding(paddingValues).
-            fillMaxSize())
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        )
         {
             when (val state = moviesState) {
                 is UiState.Loading -> LoadingIndicator()
                 is UiState.Success -> {
                     if (state.data.isEmpty()) {
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
                             Text("No movies found for this filter.")
                         }
                     } else {
                         MovieListGrid(movies = state.data)
                     }
                 }
+
                 is UiState.Error -> AppError(message = state.message) {
                     viewModel.retryLoadMovies()
                 }
