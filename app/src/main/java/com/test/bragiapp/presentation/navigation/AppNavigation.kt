@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,10 +19,11 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-
+    val mainGraphRoute = "main_navigation_graph"
     NavHost(
         navController = navController,
-        startDestination = Screen.MoviesScreen.route + "?$ARG_GENRE_ID={$ARG_GENRE_ID}"
+        startDestination = Screen.MoviesScreen.route + "?$ARG_GENRE_ID={$ARG_GENRE_ID}",
+        route = mainGraphRoute
     ) {
         composable(
             route = Screen.MoviesScreen.route + "?$ARG_GENRE_ID={$ARG_GENRE_ID}",
@@ -30,7 +32,12 @@ fun AppNavigation() {
                 defaultValue = -1
             })
         ) { backStackEntry ->
-            val moviesViewModel: MoviesViewModel = koinViewModel()
+            val mainGraphBackStackEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(mainGraphRoute)
+            }
+            val moviesViewModel: MoviesViewModel = koinViewModel(
+                viewModelStoreOwner = mainGraphBackStackEntry
+            )
 
             val initialGenreIdArg = backStackEntry.arguments?.getInt(ARG_GENRE_ID)
 
@@ -53,9 +60,15 @@ fun AppNavigation() {
             )
         }
 
-        composable(Screen.FiltersScreen.route) {
+        composable(Screen.FiltersScreen.route) { backStackEntry ->
             val filtersViewModel: FiltersViewModel = koinViewModel()
-            val moviesViewModel: MoviesViewModel = koinViewModel()
+
+            val mainGraphBackStackEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(mainGraphRoute)
+            }
+            val moviesViewModel: MoviesViewModel =
+                koinViewModel(viewModelStoreOwner = mainGraphBackStackEntry)
+
             val currentlyAppliedGenreId by moviesViewModel.selectedGenreIdFromFilter.collectAsState()
 
 
